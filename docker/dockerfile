@@ -1,0 +1,31 @@
+# docker build -t redis-server:6.2.6 .
+# docker run -d --name redis -p 10000:6379 -e REDIS_USER=db -e REDIS_PASSWORD=db redis-server:6.2.6
+
+FROM redis:6.2.6
+
+USER root
+RUN mkdir /home/redis && \
+    mkdir /home/redis/certs
+
+COPY ./redis.conf /home/redis/redis.conf
+COPY ./users.acl /home/redis/users.acl
+COPY ./certificates/ca.pem /home/redis/certs/ca.pem
+COPY ./certificates/server-cert.pem /home/redis/certs/server-cert.pem
+COPY ./certificates/server-key.pem /home/redis/certs/server-key.pem
+RUN chown -R redis:redis /home/redis
+RUN chmod 600 /home/redis/certs/*
+RUN chmod 600 /home/redis/users.acl
+
+USER redis
+WORKDIR /home/redis
+RUN echo "#!/bin/bash" >> start-redis.sh; \
+    echo "if [[ -z \"\${REDIS_USER}\" ]]; then REDIS_USER=\"digitbain\"; fi" >> start-redis.sh; \
+    echo "if [[ -z \"\${REDIS_PASSWORD}\" ]]; then REDIS_PASSWORD=\"digitbain\"; fi" >> start-redis.sh; \
+    echo "sed -i 's/REDIS_USER/'\$REDIS_USER'/g' /home/redis/users.acl" >> start-redis.sh; \
+    echo "sed -i 's/REDIS_PASSWORD/'\$REDIS_PASSWORD'/g' /home/redis/users.acl" >> start-redis.sh; \
+    echo "redis-server /home/redis/redis.conf &" >> start-redis.sh; \
+    echo "wait -n" >> start-redis.sh; \
+    echo "exit $?" >> start-redis.sh;
+RUN chmod +x start-redis.sh
+
+ENTRYPOINT  [ "/home/redis/start-redis.sh" ]
