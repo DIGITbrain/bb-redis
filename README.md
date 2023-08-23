@@ -14,7 +14,7 @@ BSD-3-Clause
 
 ## Version
 
-6.2.4
+7.x
 
 ## Description
 

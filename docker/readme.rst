@@ -8,7 +8,7 @@ About
 
 Version
 -------
-Redis version **6.2.6** deployed based on the official Docker Hub image: [2]_. 
+Redis version **7.x** deployed based on the official Docker Hub image: [2]_.
 
 License
 -------
@@ -18,9 +18,9 @@ Pre-requisites
 ==============
 * *docker* installed
 * access to DIGITbrain private docker repo (username, password) to pull the image:
-  
+
   - ``docker login dbs-container-repo.emgora.eu``
-  - ``docker pull dbs-container-repo.emgora.eu/redis:6.2.6``
+  - ``docker pull dbs-container-repo.emgora.eu/redis:7``
 
 Usage
 =====
@@ -31,7 +31,7 @@ Usage
       -e REDIS_USER=myredisuser \
       -e REDIS_PASSWORD=myredispassword \
       -p 16379:6379 \
-      redis:6.2.6 
+      redis:7
 
 where REDIS_USER and REDIS_PASSWORD parameters create a new database user with the given username and password,
 and standard Redis port 6379 is opened on as port 16379 the host.
@@ -44,7 +44,7 @@ and standard Redis port 6379 is opened on as port 16379 the host.
 Security
 ========
 The image uses SSL/TLS traffic encryption and username-password authentication (*digitbrain/digitbrain*) by default.
-The pre-built server certificate signed by DIGITbrain CA. 
+The pre-built server certificate signed by DIGITbrain CA.
 
 You can override all these settings with your own (certificates, CA file, configuration, password), see below.
 
@@ -53,7 +53,7 @@ Configuration
 
 Parameters
 ----------
-.. list-table:: 
+.. list-table::
    :header-rows: 1
 
    * - Name
@@ -68,7 +68,7 @@ Parameters
 
 Ports
 -----
-.. list-table:: 
+.. list-table::
   :header-rows: 1
 
   * - Container port
@@ -76,33 +76,33 @@ Ports
     - Comment
   * - *Redis port*
     - ``-p 16379:6379``
-    - Default Redis port 6379 is opened as port 16379 on the host  
+    - Default Redis port 6379 is opened as port 16379 on the host
 
 Volumes
 -------
-.. list-table:: 
+.. list-table::
   :header-rows: 1
 
   * - Name
     - Volume mount example
     - Comment
-  * - *Data*    
+  * - *Data*
     - ``-v $PWD/redis-data:/data``
     - Redis data persisted on host's ./redis-data directory
-  * - *Configuration*    
+  * - *Configuration*
     - ``-v $PWD/redis.conf:/home/redis/redis.conf``
     - Custom Redis configuration file. Refer to [4]_ for details.
-  * - *Certificate Authority file*    
-    - ``-v $PWD/certificates/ca.crt:/home/redis/certs/ca.pem``  
+  * - *Certificate Authority file*
+    - ``-v $PWD/certificates/ca.crt:/home/redis/certs/ca.pem``
     - Custom Certificate Authority (CA) certificate
-  * - *Server certificate*    
-    - ``-v $PWD/certificates/redis.crt:/home/redis/certs/server-cert.pem``  
+  * - *Server certificate*
+    - ``-v $PWD/certificates/redis.crt:/home/redis/certs/server-cert.pem``
     - Custom server certificate
-  * - *Server key*    
-    - ``-v $PWD/certificates/redis.key:/home/redis/certs/server-key.pem``  
+  * - *Server key*
+    - ``-v $PWD/certificates/redis.key:/home/redis/certs/server-key.pem``
     - Custom server certificate
-  * - *Users*    
-    - ``-v $PWD/certificates/redis.key:/home/redis/users.acl``  
+  * - *Users*
+    - ``-v $PWD/certificates/redis.key:/home/redis/users.acl``
     - Usernames, passwords, ACLs. Refer to [5]_ for details.
 
 References

@@ -1,7 +1,7 @@
-# docker build -t redis-server:6.2.6 .
+# docker build -t redis-server:7 .
 # docker run -d --name redis -p 10000:6379 -e REDIS_USER=db -e REDIS_PASSWORD=db redis-server:6.2.6
 
-FROM redis:6.2.6
+FROM redis:7
 
 USER root
 RUN mkdir /home/redis && \
